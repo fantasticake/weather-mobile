@@ -27,15 +27,19 @@ export default class App extends React.Component {
     const {
       data: { weather },
     } = await axios.get(url);
-    return weather[0].main;
+    return { weather: weather[0].main, subWeather: weather[0].description };
   };
   async componentDidMount() {
     const coords = await this.getCoords();
-    const weather = await this.getWeatherByCoords(coords);
-    this.setState({ isLoading: false, weather });
+    const { weather, subWeather } = await this.getWeatherByCoords(coords);
+    this.setState({ isLoading: false, weather, subWeather });
   }
   render = function () {
-    const { isLoading, weather } = this.state;
-    return isLoading ? <Loading /> : <Weather weather={weather} />;
+    const { isLoading, weather, subWeather } = this.state;
+    return isLoading ? (
+      <Loading />
+    ) : (
+      <Weather weather={weather} subWeather={subWeather} />
+    );
   };
 }
